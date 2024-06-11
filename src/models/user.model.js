@@ -59,7 +59,7 @@ const userSchema = new Schema(
     })
 
     userSchema.methods.isPasswordCorrect = async function(password){
-        return await bcrpt.compare(password,this.password)
+        return await bcrypt.compare(password,this.password)
 }    
 
 
