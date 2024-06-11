@@ -1,0 +1,21 @@
+{
+  "name": "chaiorbackend",
+  "version": "1.0.0",
+  "description": "a backend at chai aur code channel-youtube",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "javascript",
+    "backend",
+    "chai"
+  ],
+  "author": "achyut",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.3",  
+    "prettier": "^3.2.5"
+  }
+}
