@@ -1,3 +1,12 @@
+import { asyncHandler } from "../utils/asynchandler.js"
+import {ApiError} from "../utils/ApiError.js";
+import { User } from "../models/user.model.js";
+import {uploadOnCloudinary, deleteFileFromCloudinary} from "../utils/cloudnary.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import  jwt  from "jsonwebtoken";
+import mongoose from "mongoose";
+
+
 
 const registerUser  = asyncHandler(async (req,res)=>{
     
@@ -26,6 +35,8 @@ const registerUser  = asyncHandler(async (req,res)=>{
     }
 
     // --check for images, check for avatar
+
+   
 
         const avatarLocalPath = req.files?.avatar[0]?.path; 
    
@@ -83,5 +94,7 @@ const registerUser  = asyncHandler(async (req,res)=>{
 
 
 
-
-
+export{
+    registerUser,
+   
+}
