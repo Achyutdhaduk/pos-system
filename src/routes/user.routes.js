@@ -3,7 +3,8 @@ import { registerUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
-    changeCurrentPassword
+    changeCurrentPassword,
+    getCurrentUser
  } from "../controllers/user.controller.js";
 import multer from "multer";
 import {upload} from "../middlewares/multer.middleware.js"
@@ -27,6 +28,7 @@ router.route("/login").post(loginUser)
 router.route("/logout").post( veriftJWT,logoutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-passsword").post(veriftJWT,changeCurrentPassword)
+router.route("/current-user").get(veriftJWT,getCurrentUser)
 
 
 
