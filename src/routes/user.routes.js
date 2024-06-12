@@ -6,7 +6,8 @@ import { registerUser,
     changeCurrentPassword,
     getCurrentUser,
     updateAccountDetails,
-    UpdateUserAvatar
+    UpdateUserAvatar,
+    updateUserCoverImage
  } from "../controllers/user.controller.js";
 import multer from "multer";
 import {upload} from "../middlewares/multer.middleware.js"
@@ -33,6 +34,7 @@ router.route("/change-passsword").post(veriftJWT,changeCurrentPassword)
 router.route("/current-user").get(veriftJWT,getCurrentUser)
 router.route("/update-account").patch(veriftJWT,updateAccountDetails)
 router.route("/avatar").patch(veriftJWT,upload.single("avatar"),UpdateUserAvatar)
+router.route("/cover-Image").patch(veriftJWT,upload.single("coverImage"),updateUserCoverImage)
 
 
 
