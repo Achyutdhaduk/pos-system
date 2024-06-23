@@ -14,7 +14,7 @@ const createOrder = asyncHandler(async(req,res)=>{
 
           
 
-
+          let itemname;
           let totalAmount = 0;
         //  for (let i = 0; i < items.length; i++) {
         //     const item = items[i];
@@ -24,28 +24,34 @@ const createOrder = asyncHandler(async(req,res)=>{
         //   }
           for (const item of items) {
              const itemDetails = await Item.findById(item.itemId);
-             
+         //    console.log(itemDetails);
                if (!itemDetails) {
                return res.status(404).json({ error: `Item with ID ${item.itemId} not found.` });
                }
-            totalAmount += item.quantity * item.price;
-           
+            totalAmount += item.quantity * itemDetails.price;
+         
+               itemname=itemDetails.name
+               console.log(itemname);
           }
 
-        //   console.log(totalAmount+"aaaaaaaaaaa");
+
+       
           
       
           // Create a new item order
           const newOrder = new Itemorder({
             items,
             totalAmount,
-            customerName
+            customerName,
+            itemname
+            
+            
           });
           const savedOrder = await newOrder.save();
           
-
-
-          //
+      
+       
+         
 
           if(!savedOrder){
             throw new ApiError(500, "Error while CREATING OREDER ");
@@ -54,11 +60,16 @@ const createOrder = asyncHandler(async(req,res)=>{
           return res.status(201).json({ message: 'Order created successfully.' });
    
    
-
         
     } catch (error) {
         throw new ApiError(500, error.message || "Error while CREATING OREDER "); 
     }
 })
 
-export {createOrder}
+
+const deleteorder = asyncHandler(async(req,res)=>{
+
+    const {id} = req.params
+})
+
+export {createOrder,deleteorder}

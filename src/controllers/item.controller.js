@@ -2,57 +2,113 @@ import {Item} from "../models/item.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asynchandler.js";
 import { ApiError } from "../utils/ApiError.js";
+import mongoose from "mongoose";
 
-const addItem = asyncHandler(async(req,res)=>{
+// const addItem = asyncHandler(async(req,res)=>{
 
-    const {name,price,category,description,available} = req.body
+//     const {name,price,category,description,available} = req.body
 
-    // console.log(JSON.stringify(req.body)+"wsedrtyujijuhgfds");
-    // if (
-    //     [ name, price, category].some((field) =>
-    //         field?.trim() === "")
-    // ) {
-    //     throw new ApiError(400, "All fields are required")
-    // }
+//     // console.log(JSON.stringify(req.body)+"wsedrtyujijuhgfds");
+//     // if (
+//     //     [ name, price, category].some((field) =>
+//     //         field?.trim() === "")
+//     // ) {
+//     //     throw new ApiError(400, "All fields are required")
+//     // }
+//     if ([name, price, category].some(field => typeof field === 'string' && field.trim() === '')) {
+//         throw new ApiError(400, "All fields are required")
+//       }
+
+    
+//     // const existedItem = await Item.findOne({
+        
+//     //     $or: [{ name },{category}]
+
+//     // })
+//     // console.log(existedItem+"ertgtrs");
+//     // if (existedItem) {
+//     //     throw new ApiError(409, "item  already Exists")
+//     // }
+
+//     const existedItem = await Item.findOne({ name ,category});
+//     console.log(existedItem + "ertgtrs");
+//     if (existedItem!=null) {
+//         throw new ApiError(409, "Item already exists with the same name and category");
+//     }
+  
+//     console.log({name,price});
+//     const addItem = await Item.create({
+//         name,
+//         price,
+//         category,
+//         description,
+//         available   
+//     })
+   
+
+//    if(!addItem){
+
+//     throw new ApiError(500,"something went wrong while adding Item")
+//    } 
+
+//    return res.status(201).json(
+//     new ApiResponse(200,addItem,"Item Added Succesfully")
+//    )
+
+// })
+
+const addItem = asyncHandler(async (req, res) => {
+    const { name, price, category, description, available } = req.body;
+
+    // Validate required fields
     if ([name, price, category].some(field => typeof field === 'string' && field.trim() === '')) {
-        throw new ApiError(400, "All fields are required")
-      }
-
-
-    const existedItem = await Item.findOne({
-        name,
-    })
-    if (existedItem) {
-        throw new ApiError(409, "item  already Exists")
+        throw new ApiError(400, "All fields are required");
     }
 
-    const addItem = await Item.create({
-        name,
-        price,
-        category,
-        description,
-        available   
-    })
+    // Check for existing item with the same name and category
+    const existedItem = await Item.findOne({ name });
+    console.log(existedItem + "ertgtrs");
+    if (existedItem) {
+        throw new ApiError(409, "Item already exists with the same name and category");
+    }
 
-   if(!addItem){
+    // Add new item
+    console.log({name,price,category});
+    try {
+        const newItem = await Item.create({
+            name,
+            price,
+            category,
+            description,
+            available
+        });
+        
+        if (!newItem) {
+            throw new ApiError(500, "Something went wrong while adding the item");
+        }
 
-    throw new ApiError(500,"something went wrong while adding Item")
-   } 
+        return res.status(201).json(
+            new ApiResponse(200, newItem, "Item added successfully")
+        );
+    } catch (error) {
+        if (error.code === 11000) {
+            throw new ApiError(409, "Duplicate item detected");
+        } else {
+            throw new ApiError(500, "An unexpected error occurred");
+        }
+    }
+});
 
-   return res.status(201).json(
-    new ApiResponse(200,addItem,"Item Added Succesfully")
-   )
+// module.exports = addItem;
 
-})
 
 const updateItem = asyncHandler(async(req,res)=>{
-    const {id} = req.params
+    const {itemnametoupdate} = req.params
     const { name, price, category, description, available } = req.body;
 
 
 
-
-const item = await Item.findById(id);
+const item = await Item.findOne({name:itemnametoupdate});
 if (!item) {
   return res.status(404).json({ error: 'Item not found.' });
 }
@@ -87,34 +143,30 @@ try {
 
 
 const deleteitem = asyncHandler(async(req,res)=>{
-
-   
-
 try {
 
-    const {id} = req.params
-    if(!id){
+    const {itemtodelete} = req.params
+    
+    console.log(itemtodelete);
+    if(!itemtodelete){
         throw new ApiError(500, "item-id not found from url for Deleting ");
     }
-
-    const item = await Item.findById(id);
-
-    if (!item) {
-        throw new ApiError(404, "item not found for deleting");
-    }
-
-    // if (Item.owner.toString() !== req.user._id.toString()) {
-    //     throw new ApiError(401, "Unauthorized to delete this item");
-    // }
-
-
-    const deletedItem = await Item.findByIdAndDelete(id);
-
+   
+   // const item = await Item.findOne(itemtodelete);
+    const item = await Item.findOne({name:itemtodelete});
     
-
-    if (!deletedItem) {
-        throw new ApiError(500, "Error while deleting item");
+    // // console.log(item+"aaaaaaaaaaaa");
+    const itemid = item._id;
+    
+    if (!itemid) {
+        throw new ApiError(404, "item-id not found for deleting");
     }
+
+    const deletedItem = await Item.findByIdAndDelete(itemid);
+    if (!deletedItem) {
+        throw new ApiError(404, "Item not found for deleting");
+    }
+    
     res.status(200).json(new ApiResponse(200, {}, "item deleted successfully"));
 
     
@@ -139,12 +191,12 @@ const getitem = asyncHandler(async(req,res)=>{
     try {
 
         
-    const {id} = req.params
-    if(!id){
+    const {name} = req.params
+    if(!name){
         throw new ApiError(500, "item-id not found from url for fetch-item ");
     }
 
-       const item = await Item.findById(id)
+       const item = await Item.findOne({name:name})
        if (!item) {
         throw new ApiError(404, "item not found for fetching-item");
     }

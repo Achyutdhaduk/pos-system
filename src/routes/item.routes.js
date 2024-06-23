@@ -6,10 +6,10 @@ const router = Router()
 
 
 router.route("/additem").post(veriftJWT,addItem)
-router.route("/updateitem/:id").patch(veriftJWT,updateItem)
-router.route("/deleteitem/:id").delete(veriftJWT,deleteitem)
+router.route("/updateitem/:itemnametoupdate").patch(veriftJWT,updateItem)
+router.route("/deleteitem/:itemtodelete").delete(veriftJWT,deleteitem)
 router.route("/getallitem").get(veriftJWT,getallitems)
-router.route("/getitem/:id").get(veriftJWT,getitem)
+router.route("/getitem/:name").get(veriftJWT,getitem)
 
 
 export default router

@@ -9,14 +9,16 @@ const ItemorderSchema = new Schema(
           ref: "Item",
           required: true,
         },
+      /*  itemname:{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Item",
+          required: true,
+        },*/
         quantity: {
           type: Number,
           required: true,
         },
-        price: {
-          type: Number,
-          required: true,
-        },
+       
       },
     ],
     totalAmount: {
