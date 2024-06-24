@@ -7,13 +7,13 @@ const ItemorderSchema = new Schema(
         itemId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Item",
-          required: true,
+          // required: true,
         },
-      /*  itemname:{
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Item",
-          required: true,
-        },*/
+        itemname:{
+          type: String,
+        
+          // required: true,
+        },
         quantity: {
           type: Number,
           required: true,
