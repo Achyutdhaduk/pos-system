@@ -5,6 +5,7 @@ import { registerUser,
     refreshAccessToken,
     changeCurrentPassword,
     getCurrentUser,
+    getallUser,
     updateAccountDetails,
     UpdateUserAvatar,
     updateUserCoverImage
@@ -32,6 +33,7 @@ router.route("/logout").post( veriftJWT,logoutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-passsword").post(veriftJWT,changeCurrentPassword)
 router.route("/current-user").get(veriftJWT,getCurrentUser)
+router.route("/getall-User").get(veriftJWT,getallUser)
 router.route("/update-account").patch(veriftJWT,updateAccountDetails)
 router.route("/avatar").patch(veriftJWT,upload.single("avatar"),UpdateUserAvatar)
 router.route("/cover-Image").patch(veriftJWT,upload.single("coverImage"),updateUserCoverImage)

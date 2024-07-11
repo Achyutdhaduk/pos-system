@@ -305,7 +305,12 @@ const getCurrentUser = asyncHandler(async(req,res)=>{
     .json(new ApiResponse(200,req.user,"current user fatched Successfully"))
 })
 
-
+const getallUser = asyncHandler(async(req,res)=>{
+    const users =await  User.find({})
+   
+    return res.status(200)
+    .json(new ApiResponse(200,users,"All user fatched Successfully"))
+})
 const updateAccountDetails = asyncHandler(async(req,res)=>{
 
     const {fullName,email}=req.body
@@ -411,7 +416,8 @@ export {
     getCurrentUser,
     updateAccountDetails,
     UpdateUserAvatar,
-    updateUserCoverImage
+    updateUserCoverImage,
+    getallUser
 }
 
 
