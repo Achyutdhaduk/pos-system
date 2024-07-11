@@ -261,4 +261,6 @@ const updateOrder = asyncHandler(async(req,res)=>{
 
 })
 
-export {createOrder,deleteallorder,deleteorderbyusername}
+export {createOrder,
+    deleteallorder,
+    deleteorderbyusername}
