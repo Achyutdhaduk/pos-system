@@ -2,6 +2,21 @@ import mongoose, { Schema } from "mongoose";
 
 const ItemorderSchema = new Schema(
   {
+    customer: {
+      type: String,
+    },
+    country: {
+      type: String,
+      required: true
+    },
+    zipcode: {
+      type: Number,
+      required: true
+    },
+    phone: {
+      type: Number,
+      required: true
+    },
     items: [
       {
         itemId: {
@@ -25,13 +40,15 @@ const ItemorderSchema = new Schema(
       type: Number,
       required: true,
     },
+    payment: {
+      type: String,
+      require: true 
+    },
     orderDate: {
       type: Date,
       default: Date.now,
     },
-    customerName: {
-      type: String,
-    },
+    
     status: {
       type: String,
       enum: ["pending", "completed", "cancelled"],
