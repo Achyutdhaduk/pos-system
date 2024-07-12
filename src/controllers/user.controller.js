@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asynchandler.js"
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
+import { request as Request} from "../models/request.model.js";
 import { uploadOnCloudinary, deleteFileFromCloudinary } from "../utils/cloudnary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
@@ -402,7 +403,40 @@ const updateUserCoverImage = asyncHandler(async(req,res)=>{
 
 })
 
+const userrequest =asyncHandler(async(req,res)=>{
+    const {shopname,shopaddress,shopdetails,contactno,pincode,userid,city} = req.body;
 
+    //email alredy exist send message request alredy send
+    const existingRequest = await Request.findOne({ userid });
+
+    if (existingRequest) {
+        throw new ApiError(400, "Request already sent");
+    }
+else{
+   try {
+    
+     const userrequest=await Request.create({
+    ownername:req.user?.username,
+
+    owneremail:req.user?.email,
+   shopname,
+   shopaddress,
+   shopdetails,
+   contactno,
+   pincode,
+   userid,
+   city,
+       
+});
+
+   return res.status(201).json(
+       new ApiResponse(200,userrequest,"Request to add shop send Successfully")
+   )
+   } catch (error) {
+    return res.status(500).json({message:error.message});
+   }
+}}
+)
 
 
 
@@ -417,7 +451,8 @@ export {
     updateAccountDetails,
     UpdateUserAvatar,
     updateUserCoverImage,
-    getallUser
+    getallUser,
+    userrequest
 }
 
 

@@ -42,4 +42,4 @@ const itemSchema = new mongoose.Schema({
 itemSchema.index({ name: 1 }, { unique: true }); 
 // db.items.dropIndex({ name: 1 })
  
-export const Item = new mongoose.model("Item", itemSchema);;
+export const Item = new mongoose.model("Item", itemSchema);
