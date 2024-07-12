@@ -9,7 +9,7 @@ import { registerUser,
     updateAccountDetails,
     UpdateUserAvatar,
     updateUserCoverImage,
-    
+    getAllRequests,
     userrequest
  } from "../controllers/user.controller.js";
 import multer from "multer";
@@ -40,6 +40,7 @@ router.route("/update-account").patch(veriftJWT,updateAccountDetails)
 router.route("/avatar").patch(veriftJWT,upload.single("avatar"),UpdateUserAvatar)
 router.route("/cover-Image").patch(veriftJWT,upload.single("coverImage"),updateUserCoverImage)
 router.route("/request-addshop").post(veriftJWT,userrequest)
+router.route("/getAllrequests").get(veriftJWT,getAllRequests)
 
 
 

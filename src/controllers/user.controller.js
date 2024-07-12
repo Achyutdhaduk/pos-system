@@ -439,7 +439,21 @@ else{
 )
 
 
+const getAllRequests = asyncHandler(async (req, res) => {
+    try {
+        // Fetch all requests
+        const requests = await Request.find({});
 
+        // Count the total number of requests
+        const requestCount = await Request.countDocuments();
+
+        return res.status(200).json(
+            new ApiResponse(200, { requests, requestCount }, "Requests fetched successfully")
+        );
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
 
 export {
     registerUser,
@@ -452,7 +466,8 @@ export {
     UpdateUserAvatar,
     updateUserCoverImage,
     getallUser,
-    userrequest
+    userrequest,
+    getAllRequests
 }
 
 
