@@ -10,7 +10,10 @@ import { registerUser,
     UpdateUserAvatar,
     updateUserCoverImage,
     getAllRequests,
-    userrequest
+    userrequest,
+    acceptRequest,
+    updateRequest,
+    DeleteRequest
  } from "../controllers/user.controller.js";
 import multer from "multer";
 import {upload} from "../middlewares/multer.middleware.js"
@@ -41,6 +44,9 @@ router.route("/avatar").patch(veriftJWT,upload.single("avatar"),UpdateUserAvatar
 router.route("/cover-Image").patch(veriftJWT,upload.single("coverImage"),updateUserCoverImage)
 router.route("/request-addshop").post(veriftJWT,userrequest)
 router.route("/getAllrequests").get(veriftJWT,getAllRequests)
+router.route("/acceptrequest/:requestId").get(acceptRequest)
+router.route("/update-request").patch(updateRequest)
+router.route("/delete-request/:requestId").get(DeleteRequest)
 
 
 

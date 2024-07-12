@@ -141,7 +141,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({
         $or: [{ username }, { email }]
     })
-
+    
     if (!user) {
         throw new ApiError(404, "User does not exist")
     }
@@ -454,7 +454,111 @@ const getAllRequests = asyncHandler(async (req, res) => {
         return res.status(500).json({ message: error.message });
     }
 });
+   
+const acceptRequest = asyncHandler(async (req, res) => {
+    const { requestId } = req.params; // Assuming request ID is passed as a URL parameter
+     // Assuming user ID is passed in the request body
+    // console.log(requestId);    
 
+    try {
+        // Find the request by its ID
+        let result = await Request.updateOne({ _id: requestId },
+            {
+                $set:
+                {
+                    __v: 1
+                }
+            })
+            
+        const request = await Request.findOne({ _id: requestId })
+
+        // Find the user by its ID
+
+       let result1 = await User.findByIdAndUpdate(request.userid, {
+        
+        $set:
+        {
+            __v: 1
+        }
+    }, { new: true });
+
+
+        return res.status(200).json(
+            new ApiResponse(200, request, `Request accepted to add shop `)
+        );
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+
+        const updateRequest = asyncHandler(async(req,res)=>{
+                const {shopname,shopdetails,shopaddress,contactno,pincode,userid} =req.body;
+          
+            let result = await Request.updateOne({ userid: userid },
+                {
+                    $set:
+                    {
+                      
+                        shopname:shopname,
+                        shopaddress:shopaddress,
+                        shopdetails:shopdetails,
+                        contactno:contactno,
+                        pincode:pincode,
+                    }
+                })
+                return res.status(200).json(
+                    new ApiResponse(200, result, `Update your shop Detail `)
+                );
+        })
+
+
+        const DeleteRequest = asyncHandler(async (req, res) => {
+            const { requestId } = req.params;
+
+            if (!mongoose.Types.ObjectId.isValid(requestId)) {
+                return res.status(400).json({ message: 'Invalid requestId' });
+            }
+
+            try {
+                // Find the request by its ID
+                let result = await Request.updateOne({ _id: requestId },
+                    {
+                        $set:
+                        {
+                            __v: 0
+                        }
+                    })
+                    
+                const request = await Request.findOne({ _id: requestId })
+        
+                // Find the user by its ID
+        
+               let result1 = await User.findByIdAndUpdate(request.userid, {
+                
+                $set:
+                {
+                    __v: 0
+                }
+            }, { new: true });
+
+            let result2 = await Request.findByIdAndDelete(requestId);
+            console.log(result2);
+
+            if (!result2) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+    
+
+
+
+            
+                return res.status(200).json(
+                    new ApiResponse(200, request, `Request deleted to add shop `)
+                );
+            } catch (error) {
+                return res.status(500).json({ message: error.message });
+            }
+        });
 export {
     registerUser,
     loginUser,
@@ -467,7 +571,10 @@ export {
     updateUserCoverImage,
     getallUser,
     userrequest,
-    getAllRequests
+    getAllRequests,
+    acceptRequest,
+    updateRequest,
+    DeleteRequest
 }
 
 
