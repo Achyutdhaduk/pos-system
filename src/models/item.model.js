@@ -7,6 +7,14 @@ const itemSchema = new mongoose.Schema({
     required: [true, 'Please provide product name'],
     //maxlength: [50, 'Name can not be more than 50 characters'],
   },
+  ingredients:{
+    type:String,
+    required:true,
+  },
+ type:{
+    type:String,  
+    required:true,
+ },
   price: {
     type: Number,
     required: [true, 'Please provide product price'],
@@ -14,21 +22,34 @@ const itemSchema = new mongoose.Schema({
   },
   image: {
       type: String,
+      require:true,
     },
- stock: {
-      type: Number,
-      required: true,
-      default: 0,
+   
+    shopid:{
+        type:String,
+        required:true
     },
+    // id:{
+    //     type:String,
+    // },
+    size:{
+        type:String,
+        required:true
+    },
+//  stock: {
+//       type: Number,
+//       required: true,
+//       default: 0,
+//     },
     category: {
       type: String,
       required: [true, 'Please provide product category'],
     },
-    user: {
-      type: mongoose.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
+    // user: {
+    //   type: mongoose.Types.ObjectId,
+    //   ref: 'User',
+    //   required: true,
+    // },
   available: {
      type: Boolean,
       default: true },
@@ -36,7 +57,7 @@ const itemSchema = new mongoose.Schema({
     
 
 },{
-    timestamps:true,toJSON: { virtuals: true }, toObject: { virtuals: true } 
+    timestamps:true,//toJSON: { virtuals: true }, toObject: { virtuals: true } 
 });
 
 itemSchema.index({ name: 1 }, { unique: true }); 

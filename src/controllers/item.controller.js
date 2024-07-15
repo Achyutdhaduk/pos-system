@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asynchandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import mongoose from "mongoose";
+import { uploadOnCloudinary, deleteFileFromCloudinary } from "../utils/cloudnary.js";
 
 // const addItem = asyncHandler(async(req,res)=>{
 
@@ -58,7 +59,21 @@ import mongoose from "mongoose";
 // })
 
 const addItem = asyncHandler(async (req, res) => {
-    const { name, price, category, description, available } = req.body;
+    const { name, price, category,type,ingredients,shopid,image,size, available } = req.body;
+
+
+    const itemimageLocalPath = req.files?.image[0]?.path;
+    
+    if (!itemimageLocalPath) {
+        throw new ApiError(400, "Item image Localfile is required");
+    
+    }
+ 
+     const itemimage1 = await uploadOnCloudinary(itemimageLocalPath);
+
+    
+console.log(itemimage1.url);
+
 
     // Validate required fields
     if ([name, price, category].some(field => typeof field === 'string' && field.trim() === '')) {
@@ -67,22 +82,28 @@ const addItem = asyncHandler(async (req, res) => {
 
     // Check for existing item with the same name and category
     const existedItem = await Item.findOne({ name });
-    console.log(existedItem + "ertgtrs");
+ 
     if (existedItem) {
         throw new ApiError(409, "Item already exists with the same name and category");
     }
+    console.log("Aaaaaaaaaaaaa");
 
     // Add new item
-    console.log({name,price,category});
+    
     try {
         const newItem = await Item.create({
             name,
             price,
-            category,
-            description,
-            available
+            available,
+            type,
+            ingredients,
+            shopid,
+            size,
+            image:itemimage1.url,
+            category
         });
-        
+      
+        console.log(newItem);
         if (!newItem) {
             throw new ApiError(500, "Something went wrong while adding the item");
         }
@@ -91,11 +112,8 @@ const addItem = asyncHandler(async (req, res) => {
             new ApiResponse(200, newItem, "Item added successfully")
         );
     } catch (error) {
-        if (error.code === 11000) {
-            throw new ApiError(409, "Duplicate item detected");
-        } else {
-            throw new ApiError(500, "An unexpected error occurred");
-        }
+
+        throw new ApiError(500, error.message || "Something went wrong while adding the item");
     }
 });
 
