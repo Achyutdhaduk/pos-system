@@ -122,7 +122,7 @@ console.log(itemimage1.url);
 
 const updateItem = asyncHandler(async(req,res)=>{
     const {itemnametoupdate} = req.params
-    const { name, price, category, description, available } = req.body;
+    const { name, price, category, available } = req.body;
 
 
 
@@ -134,7 +134,7 @@ if (!item) {
 item.name = name;
 item.price = price;
 item.category = category;
-item.description = description;
+
 item.available = available;
 
 try {
@@ -163,24 +163,24 @@ try {
 const deleteitem = asyncHandler(async(req,res)=>{
 try {
 
-    const {itemtodelete} = req.params
+    const {itemid} = req.params
     
-    console.log(itemtodelete);
-    if(!itemtodelete){
+   // console.log(itemtodelete);
+    /*if(!itemtodelete){
         throw new ApiError(500, "item-id not found from url for Deleting ");
     }
-   
+   */
    // const item = await Item.findOne(itemtodelete);
-    const item = await Item.findOne({name:itemtodelete});
-    
-    // // console.log(item+"aaaaaaaaaaaa");
-    const itemid = item._id;
-    
+   // const item = await Item.findOne({name:itemtodelete});
+  
+     // console.log(item+"aaaaaaaaaaaa");
+    // const itemid = item._id;
+    console.log(itemid);
     if (!itemid) {
         throw new ApiError(404, "item-id not found for deleting");
     }
-
-    const deletedItem = await Item.findByIdAndDelete(itemid);
+   
+    const deletedItem = await Item.findByIdAndDelete({_id:itemid});
     if (!deletedItem) {
         throw new ApiError(404, "Item not found for deleting");
     }

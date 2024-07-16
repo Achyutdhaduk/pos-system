@@ -15,7 +15,7 @@ router.route("/additem").post(
   ]),  
     addItem)
 router.route("/updateitem/:itemnametoupdate").patch(veriftJWT,updateItem)
-router.route("/deleteitem/:itemtodelete").delete(veriftJWT,deleteitem)
+router.route("/deleteitem/:itemid").delete(veriftJWT,deleteitem)
 router.route("/getallitem").get(veriftJWT,getallitems)
 router.route("/getitem/:name").get(veriftJWT,getitem)
 
