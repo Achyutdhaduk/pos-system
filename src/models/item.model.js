@@ -60,7 +60,7 @@ const itemSchema = new mongoose.Schema({
     timestamps:true,//toJSON: { virtuals: true }, toObject: { virtuals: true } 
 });
 
-itemSchema.index({ name: 1 }, { unique: true }); 
+// itemSchema.index({ name: 1 }, { unique: true }); 
 // db.items.dropIndex({ name: 1 })
  
 export const Item = new mongoose.model("Item", itemSchema);

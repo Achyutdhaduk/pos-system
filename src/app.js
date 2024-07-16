@@ -24,6 +24,7 @@ app.use(cookieParser())
 import userRouter from './routes/user.routes.js'
 import item from './routes/item.routes.js'
 import order from './routes/order.routes.js'
+import category from './routes/category.routes.js'
 
 
 
@@ -31,6 +32,7 @@ import order from './routes/order.routes.js'
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/item",item)
 app.use("/api/v1/item/order",order)
+app.use("/api/v1/category",category)
 
 
 
